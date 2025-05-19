@@ -83,7 +83,7 @@ impl ColorPalette {
 
     fn theme(&self) -> iced::Theme {
         iced::Theme::custom(
-            String::from("Custom"),
+            "Custom",
             iced::theme::Palette {
                 background: self.theme.base,
                 primary: *self.theme.lower.first().unwrap(),

@@ -85,14 +85,14 @@ impl Theme {
     ];
 
     /// Creates a new custom [`Theme`] from the given [`Palette`].
-    pub fn custom(name: String, palette: Palette) -> Self {
+    pub fn custom(name: &'static str, palette: Palette) -> Self {
         Self::custom_with_fn(name, palette, palette::Extended::generate)
     }
 
     /// Creates a new custom [`Theme`] from the given [`Palette`], with
     /// a custom generator of a [`palette::Extended`].
     pub fn custom_with_fn(
-        name: String,
+        name: &'static str,
         palette: Palette,
         generate: impl FnOnce(Palette) -> palette::Extended,
     ) -> Self {
@@ -215,21 +215,21 @@ impl fmt::Display for Theme {
 /// A [`Theme`] with a customized [`Palette`].
 #[derive(Debug, Clone, PartialEq)]
 pub struct Custom {
-    name: String,
+    name: &'static str,
     palette: Palette,
     extended: palette::Extended,
 }
 
 impl Custom {
     /// Creates a [`Custom`] theme from the given [`Palette`].
-    pub fn new(name: String, palette: Palette) -> Self {
+    pub fn new(name: &'static str, palette: Palette) -> Self {
         Self::with_fn(name, palette, palette::Extended::generate)
     }
 
     /// Creates a [`Custom`] theme from the given [`Palette`] with
     /// a custom generator of a [`palette::Extended`].
     pub fn with_fn(
-        name: String,
+        name: &'static str,
         palette: Palette,
         generate: impl FnOnce(Palette) -> palette::Extended,
     ) -> Self {
