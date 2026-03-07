@@ -232,38 +232,11 @@ pub fn window_event(
         // Ignore keyboard presses/releases during window focus/unfocus
         WindowEvent::KeyboardInput { is_synthetic, .. } if is_synthetic => None,
         WindowEvent::KeyboardInput { event, .. } => Some(Event::Keyboard({
-            let key = {
-                #[cfg(not(any(
-                    target_arch = "wasm32",
-                    target_os = "android"
-                )))]
-                {
-                    use winit::platform::modifier_supplement::KeyEventExtModifierSupplement;
-                    event.key_without_modifiers()
-                }
+            let key = event.logical_key.clone();
 
-                #[cfg(any(target_arch = "wasm32", target_os = "android"))]
-                {
-                    // TODO: Fix inconsistent API on Wasm
-                    event.logical_key.clone()
-                }
-            };
-
-            let text = {
-                #[cfg(not(any(target_arch = "wasm32", target_os = "android")))]
-                {
-                    use crate::core::SmolStr;
-                    use winit::platform::modifier_supplement::KeyEventExtModifierSupplement;
-
-                    event.text_with_all_modifiers().map(SmolStr::new)
-                }
-
-                #[cfg(any(target_arch = "wasm32", target_os = "android"))]
-                {
-                    // TODO: Fix inconsistent API on Wasm
-                    event.text
-                }
-            }.filter(|text| !text.as_str().chars().any(is_private_use));
+            let text = event
+                .text
+                .filter(|text| !text.as_str().chars().any(is_private_use));
 
             let winit::event::KeyEvent {
                 state,
