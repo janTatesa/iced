@@ -250,7 +250,7 @@ pub fn window_event(
             };
 
             let text = {
-                #[cfg(not(target_arch = "wasm32"))]
+                #[cfg(not(any(target_arch = "wasm32", target_os = "android")))]
                 {
                     use crate::core::SmolStr;
                     use winit::platform::modifier_supplement::KeyEventExtModifierSupplement;
@@ -258,7 +258,7 @@ pub fn window_event(
                     event.text_with_all_modifiers().map(SmolStr::new)
                 }
 
-                #[cfg(target_arch = "wasm32")]
+                #[cfg(any(target_arch = "wasm32", target_os = "android"))]
                 {
                     // TODO: Fix inconsistent API on Wasm
                     event.text
